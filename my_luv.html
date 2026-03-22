@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="utf-8">
+    <title>🤍 My luv 🤍</title>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        // เฉลยคำตอบ (ก=1, ข=2, ค=3, ง=4)
+        let correct = [1, 3, 2, 3, 1, 2, 1, 4, 2, 3]; 
+        let yourCorrect = 0;
+        let yourIncorrect = 0;
+
+        function getAns(no, ans) {
+            let totalSubject = 10; 
+            if (correct[no - 1] == ans) { yourCorrect++; } 
+            else { yourIncorrect++; }
+
+            $("#no" + no).hide();
+
+            if (no < totalSubject) {
+                $("#no" + (no + 1)).fadeIn();
+            } else {
+                $("#showCorrect").html("ถูก: " + yourCorrect + " ข้อ");
+                $("#showIncorrect").html("ผิด: " + yourIncorrect + " ข้อ");
+                let percent = (yourCorrect / totalSubject) * 100;
+                let msg = "";
+                if (percent >= 100) msg = "รักที่สุด! จำได้หมดเลย 😍";
+                else if (percent >= 70) msg = "เก่งมากกก จำแม่นเหมือนกันนะเรา 💖";
+                else if (percent >= 50) msg = "เกือบดีแล้ว อีกนิดนะ 🤏";
+                else msg = "เชอะะ! งอนแย้วว 😤";
+                
+                $("#showMsg").html(msg);
+                $("#showAns").fadeIn();
+            }
+        }
+
+        function game_fadein() { 
+            yourCorrect = 0; yourIncorrect = 0;
+            $("#showAns").hide();
+            for(let i=1; i<=10; i++) { $("#no"+i).hide(); }
+            $("#no1").show();
+            $('#popup_game').fadeIn(); 
+        }
+
+        function remem_fadein() {
+            for(let i=2; i<=5; i++) { $("#num"+i).hide(); }
+            $("#num1").show();
+            $('#popup_message').fadeIn(); 
+        }
+
+        function nextMsg(current) {
+            $("#num" + current).hide();
+            $("#num" + (current + 1)).fadeIn();
+        }
+
+        function hideForm() { 
+            $('.popup-container').fadeOut(); 
+        }
+
+        // เอฟเฟกต์พลุหัวใจและโชว์ QR Code
+        function celebrateLove() {
+            var end = Date.now() + (2.5 * 1000);
+            var colors = ['#ff9a9e', '#fecfef', '#ffffff', '#ff6b70'];
+
+            (function frame() {
+                confetti({ particleCount: 4, angle: 60, spread: 55, origin: { x: 0, y: 0.75 }, colors: colors });
+                confetti({ particleCount: 4, angle: 120, spread: 55, origin: { x: 1, y: 0.75 }, colors: colors });
+                if (Date.now() < end) { requestAnimationFrame(frame); }
+            }());
+
+            // รอพลุทำงานแป๊บนึงแล้วเปลี่ยนหน้าเป็น QR Code
+            setTimeout(function() {
+                $('#popup_message').fadeOut(400, function() {
+                    $('#popup_qrcode').fadeIn();
+                });
+            }, 2000);
+        }
+
+        function createHearts() {
+            const heartContainer = document.getElementById('heart-bg');
+            setInterval(() => {
+                const heart = document.createElement('i');
+                heart.classList.add('fas', 'fa-heart', 'heart-item');
+                heart.style.left = Math.random() * 100 + "vw";
+                heart.style.animationDuration = Math.random() * 3 + 3 + "s";
+                heart.style.fontSize = Math.random() * 15 + 10 + "px";
+                heart.style.opacity = Math.random() * 0.6 + 0.2;
+                heartContainer.appendChild(heart);
+                setTimeout(() => { heart.remove(); }, 6000);
+            }, 400);
+        }
+
+        window.onload = createHearts;
+    </script>
+    
+    <style type="text/css">
+        body {
+            background: linear-gradient(135deg, #91e4fd, #f5aede);
+            background-attachment: fixed; 
+            font-family: 'Arial', sans-serif;
+            text-align: center; color: white; margin: 0; padding: 20px;
+            overflow-x: hidden;
+        }
+
+        #heart-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 1;
+        }
+        .heart-item {
+            position: absolute; bottom: -50px; color: rgba(255, 255, 255, 0.8);
+            animation: flyUp linear forwards;
+        }
+        @keyframes flyUp {
+            to { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+        }
+
+        .font_head, .box, .popup-container { position: relative; z-index: 10; }
+
+        .font_head { font-size: 55px; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); margin-bottom: 30px; }
+        .box { width: 95%; max-width: 1100px; margin: auto; }
+
+        .box_remen, .box_game {
+            border: solid 2px #ffffff;
+            width: 45%; min-width: 300px; height: 350px;
+            border-radius: 20px; background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px); box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin: 10px; display: inline-block; vertical-align: top;
+        }
+
+        .button {
+            width: 80%; max-width: 250px; height: 60px; border: solid 2px #ff9a9e;
+            border-radius: 20px; font-size: 20px; background-color: #c5f8ff;
+            color: #e00606; transition: 0.3s; cursor: pointer; margin-top: 20px;
+        }
+        .button:hover { transform: scale(1.05); background: white; }
+
+        .popup-container {
+            width: 500px; max-width: 90%; background-color: #f0f9ff; color: #333;
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            display: none; border-radius: 20px; z-index: 1000; padding: 20px;
+            border: solid 3px #ff9a9e; box-shadow: 0 0 50px rgba(0,0,0,0.3);
+        }
+
+        .button_ans {
+            display: block; width: 100%; padding: 10px; margin: 6px 0;
+            border: solid 2px #ff9a9e; border-radius: 10px; background: white;
+            cursor: pointer; font-size: 16px; transition: 0.2s;
+        }
+        .button_ans:hover { background-color: #ff9a9e; color: white; }
+        .x { text-align: right; cursor: pointer; font-size: 22px; }
+        .hide { display: none; }
+        .subject { font-size: 22px; color: #ff6b70; margin-bottom: 15px; }
+
+        .img_text { overflow: hidden; margin-top: 15px; }
+        .box_img { width: 140px; height: 140px; float: left; margin-right: 15px; border-radius: 10px; overflow: hidden; border: 2px solid #ff9a9e; }
+        .img { width: 100%; height: 100%; object-fit: cover; }
+        .text_side { text-align: left; font-size: 15px; color: #555; }
+        .font_remem_head { color: #ff6b70; margin-top: 0; }
+        
+        /* สไตล์เพิ่มเติมสำหรับ QR Code */
+        .qr-img { width: 220px; height: 220px; margin: 15px auto; border: 4px solid #ff9a9e; border-radius: 10px; display: block; }
+    </style>
+</head>
+<body>
+
+    <div id="heart-bg"></div>
+
+    <h1 class="font_head">💐Happy anniversary 3M naaa 💐</h1>
+
+    <div id="popup_message" class="popup-container">
+        <div class="x" onclick="hideForm()"><i class="fa-solid fa-xmark"></i></div>
+        
+        <div id="num1">
+            <h2 class="font_remem_head">ถึง...คนเก่งของเค้า ❤️ (1/5)</h2>
+            <p style="text-align:left; color:#555;">ขอบคุณตลอด 3 เดือน ที่ยังน่ารักกับเค้าเหมือนเดิมน้าค้าบบบ ขอบคุณที่พยายามมาตลอดเพื่อเค้าน้าค้าบบบ<br>เค้าสัญญาว่าจาเป็นแฟนที่ดีขึ้นเพื่อเทอน้าค้าบบบ เค้าอยากอยู่กับเทอปะนานๆเยยน้าค้าบบ เค้ารักเทอน้าค้าบบบ</p>
+            <button class="button" onclick="nextMsg(1)" style="height: 50px;">ปัยหน้าต่อปายยย</button>
+        </div>
+
+        <div id="num2" class="hide">
+            <h2 class="font_remem_head">รูปคู่รูปแรก ❤️ (2/5)</h2>
+            <div class="img_text">
+                <div class="box_img"><img src="img/frist_image.jpg" class="img"></div>
+                <div class="text_side">
+                    <p>นี้คือรูปคู่รูปแรกของเราน้าอ้วง ตอนนั้นเค้ามีความสุขมากๆๆๆเยยน้าาา รู้สึกคิดถูกมากๆที่เลือกเทอเป็นแฟน</p>
+                </div>
+            </div>
+            <button class="button" onclick="nextMsg(2)" style="height: 50px;">ปัยหน้าต่อปายยย</button>  
+        </div>
+
+        <div id="num3" class="hide">
+            <h2 class="font_remem_head">ดอกไม้ช่อแรก ❤️ (3/5)</h2>
+            <div class="img_text">
+                <div class="box_img"><img src="img/50226_0.jpg" class="img"></div>
+                <div class="text_side">
+                    <p>ตอนเอาดอกไม้ให้เทอ เอ็นดูเทอมากเยย เทอดีใจเหมือนเด็กน้อยได้ของเล่นเยยน้ารู้มั้ยย รักเทอน้าา จุ๊บบ</p>
+                </div>
+            </div>
+            <button class="button" onclick="nextMsg(3)" style="height: 50px;">ปัยหน้าต่อปายยย</button>  
+        </div>
+
+        <div id="num4" class="hide">
+            <h2 class="font_remem_head">วาเลนไทน์ ❤️ (4/5)</h2>
+            <div class="img_text">
+                <div class="box_img"><img src="img/50219_0.jpg" class="img"></div>
+                <div class="text_side">
+                    <p>วันนั้นแอบในห้องน้ำรอเซอร์ไพรส์เทอ ตื่นเต้นมากกก ขอบคุณที่เกิดมาให้เค้ารักน้าค้าบบ จุ๊บบบ</p>
+                </div>
+            </div>
+            <button class="button" onclick="nextMsg(4)" style="height: 50px;">ปัยหน้าต่อปายยย</button>  
+        </div>
+
+        <div id="num5" class="hide">
+            <h2 class="font_remem_head">โทรหาแฟน ❤️ (5/5)</h2>
+            <div class="img_text">
+                <div class="box_img"><img src="img/50227_0.jpg" class="img"></div>
+                <div class="text_side">
+                    <p>ชอบเวลาโทรคุยกับเทอที่สุด มีความสุขมากๆ สัญญาว่าจะเป็นแฟนที่ดีของเทอตลอดไปน้าค้าบบบ</p>
+                </div>
+            </div>
+            <button class="button" onclick="celebrateLove()" style="height: 50px; background:#ff9a9e; color:white;">กดเพื่อรับความรัก</button>
+        </div>
+    </div>
+
+    <div id="popup_qrcode" class="popup-container">
+        <div class="x" onclick="hideForm()"><i class="fa-solid fa-xmark"></i></div>
+        <h2 class="font_remem_head">รางวัลสำหรับคนเก่งของเค้า ❤️</h2>
+        <img src="img/qrlove.png" class="qr-img"> <p style="color:#555;">อุ้ยๆๆๆอาๆๆไยน้าาาา</p>
+        <button class="button" onclick="hideForm()" style="height: 45px; width: 120px; font-size: 16px;">ปิด</button>
+    </div>
+    
+    <div id="popup_game" class="popup-container">
+        <div class="x" onclick="hideForm()"><i class="fa-solid fa-xmark"></i></div>
+        
+        <div id="no1"><h1 class="subject">1. เราคบกันวันที่เท่าไร</h1>
+            <button onclick="getAns(1,1)" class="button_ans">ก. 23 ธันวาคม 2568</button>
+            <button onclick="getAns(1,2)" class="button_ans">ข. 23 มกราคม 2569</button>
+            <button onclick="getAns(1,3)" class="button_ans">ค. 12 กันยายน 2552</button>
+            <button onclick="getAns(1,4)" class="button_ans">ง. ผิดทุกข้อ</button>
+        </div>
+
+        <div id="no2" class="hide"><h1 class="subject">2. เราคบกันมากี่เดือนแล้ว</h1>
+            <button onclick="getAns(2,1)" class="button_ans">ก. 9 เดือน</button>
+            <button onclick="getAns(2,2)" class="button_ans">ข. 5 เดือน</button>
+            <button onclick="getAns(2,3)" class="button_ans">ค. 3 เดือน</button>
+            <button onclick="getAns(2,4)" class="button_ans">ง. 1 เดือน</button>
+        </div>
+
+        <div id="no3" class="hide"><h1 class="subject">3. เค้าเกิดวันไหนน้าาา</h1>
+            <button onclick="getAns(3,1)" class="button_ans">ก. 26 กันยายน 2551</button>
+            <button onclick="getAns(3,2)" class="button_ans">ข. 9 กันยายน 2552</button>
+            <button onclick="getAns(3,3)" class="button_ans">ค. 5 สิงหาคม 2552</button>
+            <button onclick="getAns(3,4)" class="button_ans">ง. 16 มีนาคม 2552</button>
+        </div>
+
+        <div id="no4" class="hide"><h1 class="subject">4. ดอกไม้ที่เค้าซื้อให้ดอกแรกสีอะไร</h1>
+            <button onclick="getAns(4,1)" class="button_ans">ก. สีม่วง</button>
+            <button onclick="getAns(4,2)" class="button_ans">ข. สีชมพู</button>
+            <button onclick="getAns(4,3)" class="button_ans">ค. สีฟ้า</button>
+            <button onclick="getAns(4,4)" class="button_ans">ง. สีแดง</button>
+        </div>
+
+        <div id="no5" class="hide"><h1 class="subject">5. หนังเรื่องแรกที่ดูด้วยกันคืออะไร</h1>
+            <button onclick="getAns(5,1)" class="button_ans">ก. สัปเหร่อ2</button>
+            <button onclick="getAns(5,2)" class="button_ans">ข. อวตาร</button>
+            <button onclick="getAns(5,3)" class="button_ans">ค. ราคี</button>
+            <button onclick="getAns(5,4)" class="button_ans">ง. top gun</button>
+        </div>
+
+        <div id="no6" class="hide"><h1 class="subject">6. เค้าชอบกินข้าวกับอะไร</h1>
+            <button onclick="getAns(6,1)" class="button_ans">ก. แกงส้ม</button>
+            <button onclick="getAns(6,2)" class="button_ans">ข. กะเพราหมูกรอบ</button>
+            <button onclick="getAns(6,3)" class="button_ans">ค. กบทอด</button>
+            <button onclick="getAns(6,4)" class="button_ans">ง. ต้มจับฉ่าย</button>
+        </div>
+
+        <div id="no7" class="hide"><h1 class="subject">7. เค้ามีพี่น้องกี่คน</h1>
+            <button onclick="getAns(7,1)" class="button_ans">ก. ลูกคนเดียว</button>
+            <button onclick="getAns(7,2)" class="button_ans">ข. 2 คน</button>
+            <button onclick="getAns(7,3)" class="button_ans">ค. 3 คน</button>
+            <button onclick="getAns(7,4)" class="button_ans">ง. 5 คน</button>
+        </div>
+
+        <div id="no8" class="hide"><h1 class="subject">8. เค้าชอบเล่นกีฬาอะไร</h1>
+            <button onclick="getAns(8,1)" class="button_ans">ก. เปตอง</button>
+            <button onclick="getAns(8,2)" class="button_ans">ข. บาส</button>
+            <button onclick="getAns(8,3)" class="button_ans">ค. ว่ายน้ำ</button>
+            <button onclick="getAns(8,4)" class="button_ans">ง. ฟุตบอล</button>
+        </div>
+
+        <div id="no9" class="hide"><h1 class="subject">9. เค้าเชียร์บอลทีมอะไร</h1>
+            <button onclick="getAns(9,1)" class="button_ans">ก. แมนซิ</button>
+            <button onclick="getAns(9,2)" class="button_ans">ข. แมนยู</button>
+            <button onclick="getAns(9,3)" class="button_ans">ค. อาเซนอล</button>
+            <button onclick="getAns(9,4)" class="button_ans">ง. เอฟเวอตัน</button>
+        </div>
+
+        <div id="no10" class="hide"><h1 class="subject">10. เวลาว่างเค้าชอบทำอะไร</h1>
+            <button onclick="getAns(10,1)" class="button_ans">ก. คุยกับเทอคิดถึงเทอ</button>
+            <button onclick="getAns(10,2)" class="button_ans">ข. คุยกับเทอ</button>
+            <button onclick="getAns(10,3)" class="button_ans">ค. คุยกับเทอคิดถึงเทอรักเทอ</button>
+            <button onclick="getAns(10,4)" class="button_ans">ง. ผิดทุกข้อ</button>
+        </div>
+
+        <div id="showAns" class="hide">
+            <h2 style="color:#ff6b70;">สรุปคะแนน</h2>
+            <p id="showCorrect"></p><p id="showIncorrect"></p>
+            <h3 id="showMsg"></h3>
+            <button class="button" onclick="hideForm()" style="width:100px; height:40px; font-size:16px;">ปิด</button>
+        </div>
+    </div>
+
+    <div class="box">
+        <div class="box_remen">
+            <h1>ความในใจตลอด 3 เดือน</h1>
+            <input type="button" class="button" value="กดตรงนี้!" onclick="remem_fadein()">
+        </div>
+        <div class="box_game">
+            <h1>เกมอะไรน้าาาาา?</h1>
+            <input type="button" class="button" value="เริ่มเล่นเกม!" onclick="game_fadein()">
+        </div>
+    </div>
+</body>
+</html>
